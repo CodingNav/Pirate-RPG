@@ -17,5 +17,5 @@ function animations(folderName, animationName) {
     }, 150)
 }
 
-animations(2, "ATTACK")
-animations(2, "DIE")
+// animations(2, "ATTACK")
+// animations(2, "DIE")
