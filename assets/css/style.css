@@ -2,3 +2,15 @@ body {
     background-image: url("../images/background.png");
     background-size: cover;
 }
+
+#playerPirate {
+    position: absolute;
+    left: 0;
+}
+
+
+#enemyPirate {
+    transform: scaleX(-1);
+    position: absolute;
+    right: 0;
+}

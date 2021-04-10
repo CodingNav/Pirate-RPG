@@ -1,6 +1,8 @@
 
-var animationInterval;
-var playerSelected = false;
+var animationInterval = {};
+var playerSelected = false; // Starts off as false to tell the game that the player has not picked his/her own character yet.
+var enemySelected = false;
+
 
 $(".pirate").click(function () {
     if (playerSelected == false) {
@@ -19,22 +21,34 @@ $(".pirate").click(function () {
     }
     else {
         if (this.id == "pirateOne") {
+            enemySelected = 1;
             $("#mainScreen").hide();
         }
         else if (this.id == "pirateTwo") {
+            enemySelected = 2;
             $("#mainScreen").hide();
         }
         else {
+            enemySelected = 3;
             $("#mainScreen").hide();
         }
         if (playerSelected == 1) {
-            animations(1, "_entity_000_", "WALK")
+            animations("#playerPirate", 1, "_entity_000_", "WALK")
         }
         else if (playerSelected == 2) {
-            animations(2, "_entity_000_", "WALK")
+            animations("#playerPirate", 2, "_entity_000_", "WALK")
         }
         else {
-            animations(3, "_3-PIRATE_", "WALK")
+            animations("#playerPirate", 3, "_3-PIRATE_", "WALK")
+        }
+        if (enemySelected == 1) {
+            animations("#enemyPirate", 1, "_entity_000_", "WALK")
+        }
+        else if (enemySelected == 2) {
+            animations("#enemyPirate", 2, "_entity_000_", "WALK")
+        }
+        else {
+            animations("#enemyPirate", 3, "_3-PIRATE_", "WALK")
         }
     }
 })
@@ -42,15 +56,13 @@ $(".pirate").click(function () {
 
 
 
-
-
-function animations(folderName, animationEntity, animationName) {
+function animations(characterId, folderName, animationEntity, animationName) {
     var i = 0;
 
-    clearInterval(animationInterval);
+    clearInterval(animationInterval[characterId]);
 
-    animationInterval = setInterval(function () {
-        $("#pirate1").attr("src", "./assets/images/" + folderName + "/" + folderName + animationEntity + animationName + "_00" + i + ".png");
+    animationInterval[characterId] = setInterval(function () {
+        $(characterId).attr("src", "./assets/images/" + folderName + "/" + folderName + animationEntity + animationName + "_00" + i + ".png");
         i++;
 
         if (i == 7) {
@@ -58,3 +70,9 @@ function animations(folderName, animationEntity, animationName) {
         }
     }, 150)
 }
+
+$("#playerPirate").click(function () {
+    $("#playerPirate").animate({ left: '10%' }, 20, function () {
+        animations("#playerPirate", 1, "_entity_000_", "ATTACK")
+    });
+});
