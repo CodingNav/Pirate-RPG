@@ -3,6 +3,26 @@ var animationInterval = {};
 var playerSelected = false; // Starts off as false to tell the game that the player has not picked his/her own character yet.
 var enemySelected = false;
 
+var characters = {
+    "Pirate One": {
+        name: "Pirate One",
+        health: 120,
+        attack: 8,
+        enemyAttackBack: 15
+    },
+    "Pirate Two": {
+        name: "Pirate Two",
+        health: 100,
+        attack: 14,
+        enemyAttackBack: 5
+    },
+    "Pirate Three": {
+        name: "Pirate Three",
+        health: 150,
+        attack: 8,
+        enemyAttackBack: 20
+    }
+};
 
 $(".pirate").click(function () {
     if (playerSelected == false) {
@@ -54,8 +74,6 @@ $(".pirate").click(function () {
 })
 
 
-
-
 function animations(characterId, folderName, animationEntity, animationName) {
     var i = 0;
 
@@ -76,3 +94,11 @@ $("#playerPirate").click(function () {
         animations("#playerPirate", 1, "_entity_000_", "ATTACK")
     });
 });
+
+/*
+-click to attack (both player and enemy walk toward one another)
+-Set each opponents health points (HP)
+-Set each opponents attack points
+-Set up attack for player/enemy (walk toward each other and attack)
+-Set up die
+*/
