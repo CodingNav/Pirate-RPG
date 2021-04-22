@@ -1,8 +1,15 @@
-
+//This object stores the set interval loops for the animations
 var animationInterval = {};
-var playerSelected = false; // Starts off as false to tell the game that the player has not picked his/her own character yet.
+
+// Starts off as false to tell the game that the player has not been chosen yet.
+var playerSelected = false;
+
+//  Starts off as false to tell the game that the enemy has not been chosen yet.
 var enemySelected = false;
 
+
+//key(property) and value pairs
+//Character object is where the character stats are stored
 var characters = {
     "Pirate One": {
         name: "Pirate One",
@@ -24,6 +31,7 @@ var characters = {
     }
 };
 
+//Click event to pick the character
 $(".pirate").click(function () {
     if (playerSelected == false) {
         if (this.id == "pirateOne") {
@@ -39,9 +47,11 @@ $(".pirate").click(function () {
             $(this).hide();
         }
     }
+    //Inside click event. This is where the enemy is chosen
     else {
         if (this.id == "pirateOne") {
             enemySelected = 1;
+            //Hides the character selection screen 
             $("#mainScreen").hide();
         }
         else if (this.id == "pirateTwo") {
@@ -52,6 +62,11 @@ $(".pirate").click(function () {
             enemySelected = 3;
             $("#mainScreen").hide();
         }
+
+        /* After the characters are chosen and main screen is hidden, 
+           this if statement has the characters walk in */
+
+        //This spawns the player's character
         if (playerSelected == 1) {
             animations("#playerPirate", 1, "_entity_000_", "WALK")
         }
@@ -61,6 +76,8 @@ $(".pirate").click(function () {
         else {
             animations("#playerPirate", 3, "_3-PIRATE_", "WALK")
         }
+
+        //This spawns the enemy character
         if (enemySelected == 1) {
             animations("#enemyPirate", 1, "_entity_000_", "WALK")
         }
@@ -73,29 +90,44 @@ $(".pirate").click(function () {
     }
 })
 
-
+//function to grabs the animation images and plays the animation
 function animations(characterId, folderName, animationEntity, animationName) {
-    var i = 0;
+    //Set currentImage to 0, so it starts with the first image
+    var currentImage = 0;
 
+    //Stops the animation currently player for specified character
+    //example: clearInterval(animationInterval["#playerPirate"]);
     clearInterval(animationInterval[characterId]);
 
+    //Set interval to 
     animationInterval[characterId] = setInterval(function () {
-        $(characterId).attr("src", "./assets/images/" + folderName + "/" + folderName + animationEntity + animationName + "_00" + i + ".png");
-        i++;
+        $(characterId).attr("src", "./assets/images/" + folderName + "/" + folderName + animationEntity + animationName + "_00" + currentImage + ".png");
+        //adds 1 to currentImage 
+        currentImage++;
 
-        if (i == 7) {
-            i = 0;
+        //each animation has 7 images. Therefore when currentImage reaches 7, the animation resets(currentImage=0).
+        if (currentImage == 7) {
+            currentImage = 0;
         }
+
+        //the time the set interval waits before running again
     }, 150)
 }
 
+//click event for the player attack
 $("#playerPirate").click(function () {
+    /*animate function to make pirate element move to left 10%, 
+    20 is how long it takes to get to the 10% 
+    everything inside callback function runs after the moving left animation is finished
+    in this function it attacks after it moves*/
     $("#playerPirate").animate({ left: '10%' }, 20, function () {
         animations("#playerPirate", 1, "_entity_000_", "ATTACK")
     });
 });
 
+
 /*
+TODO:
 -click to attack (both player and enemy walk toward one another)
 -Set each opponents health points (HP)
 -Set each opponents attack points
