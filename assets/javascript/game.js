@@ -35,63 +35,78 @@ var characters = {
 $(".pirate").click(function () {
     if (playerSelected == false) {
         if (this.id == "pirateOne") {
-            playerSelected = 1;
+            playerSelected = {
+                folder: 1,
+                entity: "_entity_000_",
+            };
             $(this).hide();
         }
         else if (this.id == "pirateTwo") {
-            playerSelected = 2;
+            playerSelected = {
+                folder: 2,
+                entity: "_entity_000_",
+            };
             $(this).hide();
         }
         else {
-            playerSelected = 3;
+            playerSelected = {
+                folder: 3,
+                entity: "_3-PIRATE_",
+            };
             $(this).hide();
         }
     }
     //Inside click event. This is where the enemy is chosen
     else {
         if (this.id == "pirateOne") {
-            enemySelected = 1;
+            enemySelected = {
+                folder: 1,
+                entity: "_entity_000_",
+            };
             //Hides the character selection screen 
             $("#mainScreen").hide();
         }
         else if (this.id == "pirateTwo") {
-            enemySelected = 2;
+            enemySelected = {
+                folder: 2,
+                entity: "_entity_000_",
+            };
             $("#mainScreen").hide();
         }
         else {
-            enemySelected = 3;
+            enemySelected = {
+                folder: 3,
+                entity: "_3-PIRATE_",
+            };
             $("#mainScreen").hide();
         }
 
         /* After the characters are chosen and main screen is hidden, 
-           this if statement has the characters walk in */
+           the following has the characters walk onto the screen (start of game) */
 
+        //player image moves 30% to left, making it off the screen
+        $("#playerPirate").css({ left: "-30%" });
         //This spawns the player's character
-        if (playerSelected == 1) {
-            animations("#playerPirate", 1, "_entity_000_", "WALK")
-        }
-        else if (playerSelected == 2) {
-            animations("#playerPirate", 2, "_entity_000_", "WALK")
-        }
-        else {
-            animations("#playerPirate", 3, "_3-PIRATE_", "WALK")
-        }
+        animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 150)
+        //Animate function that moves the player's character left onto the screen and then plays idle animation
+        $("#playerPirate").animate({ left: '0%' }, 3000, function () {
+            animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
+        });
 
+
+        //player image moves 30% to right, making it off the screen
+        $("#enemyPirate").css({ right: "-30%" })
         //This spawns the enemy character
-        if (enemySelected == 1) {
-            animations("#enemyPirate", 1, "_entity_000_", "WALK")
-        }
-        else if (enemySelected == 2) {
-            animations("#enemyPirate", 2, "_entity_000_", "WALK")
-        }
-        else {
-            animations("#enemyPirate", 3, "_3-PIRATE_", "WALK")
-        }
+        animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 150)
+        //Animate function that moves the enemies character left onto the screen and then plays idle animation
+        $("#enemyPirate").animate({ right: '0%' }, 3000, function () {
+            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
+        });
     }
 })
 
 //function to grabs the animation images and plays the animation
-function animations(characterId, folderName, animationEntity, animationName) {
+function animations(characterId, folderName, animationEntity, animationName, animationSpeed) {
     //Set currentImage to 0, so it starts with the first image
     var currentImage = 0;
 
@@ -99,7 +114,7 @@ function animations(characterId, folderName, animationEntity, animationName) {
     //example: clearInterval(animationInterval["#playerPirate"]);
     clearInterval(animationInterval[characterId]);
 
-    //Set interval to 
+    //Set interval to grab the animation images from the folder
     animationInterval[characterId] = setInterval(function () {
         $(characterId).attr("src", "./assets/images/" + folderName + "/" + folderName + animationEntity + animationName + "_00" + currentImage + ".png");
         //adds 1 to currentImage 
@@ -111,23 +126,27 @@ function animations(characterId, folderName, animationEntity, animationName) {
         }
 
         //the time the set interval waits before running again
-    }, 150)
+    }, animationSpeed)
 }
+
+
 
 //click event for the player attack
 $("#playerPirate").click(function () {
-    /*animate function to make pirate element move to left 10%, 
-    20 is how long it takes to get to the 10% 
+    /*animate function to make pirate element move to left 40%, 
+    1200 is how long it takes to get to the 40% 
     everything inside callback function runs after the moving left animation is finished
     in this function it attacks after it moves*/
-    $("#playerPirate").animate({ left: '10%' }, 20, function () {
-        animations("#playerPirate", 1, "_entity_000_", "ATTACK")
+    $("#playerPirate").animate({ left: '40%' }, 1200, function () {
+        animations("#playerPirate", playerSelected.folder, playerSelected.entity, "ATTACK", 150)
     });
+
 });
 
 
 /*
 TODO:
+-when player attacks, enemy has hurt animation
 -click to attack (both player and enemy walk toward one another)
 -Set each opponents health points (HP)
 -Set each opponents attack points
