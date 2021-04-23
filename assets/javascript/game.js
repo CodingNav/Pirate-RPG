@@ -106,7 +106,8 @@ $(".pirate").click(function () {
 })
 
 //function to grabs the animation images and plays the animation
-function animations(characterId, folderName, animationEntity, animationName, animationSpeed) {
+//animationLooped is set to true here
+function animations(characterId, folderName, animationEntity, animationName, animationSpeed, animationLooped = true, callback) {
     //Set currentImage to 0, so it starts with the first image
     var currentImage = 0;
 
@@ -123,24 +124,65 @@ function animations(characterId, folderName, animationEntity, animationName, ani
         //each animation has 7 images. Therefore when currentImage reaches 7, the animation resets(currentImage=0).
         if (currentImage == 7) {
             currentImage = 0;
+            //if animationLooped is set to false, then the animation stops playing after one loop.
+            if (animationLooped == false) {
+                //clearInterval stops the animation
+                clearInterval(animationInterval[characterId]);
+                if (callback) {
+                    callback();
+                }
+            }
         }
-
         //the time the set interval waits before running again
     }, animationSpeed)
 }
 
-
-
+//When the player attacks, debounce prevents the player from interrupting (by clicking multiple times) the current attack animation
+var debounce = false;
 //click event for the player attack
 $("#playerPirate").click(function () {
+    console.log("Debounce: " + debounce)
+    //if statement checks if debounce is true and if it's true, it stops the click function
+    //if the debounce is true, that means an attack animation is already running when the player tried clicking again
+    if (debounce == true) {
+        return;
+    }
+    //Sets debounce to true when you first click so the game knows that an attack is happening
+    debounce = true;
     /*animate function to make pirate element move to left 40%, 
     1200 is how long it takes to get to the 40% 
     everything inside callback function runs after the moving left animation is finished
     in this function it attacks after it moves*/
     $("#playerPirate").animate({ left: '40%' }, 1200, function () {
-        animations("#playerPirate", playerSelected.folder, playerSelected.entity, "ATTACK", 150)
+        animations("#playerPirate", playerSelected.folder, playerSelected.entity, "ATTACK", 150, false, function () {
+            //turns player around after attack
+            $("#playerPirate").css({ transform: "scaleX(-1)" });
+            //has player walk back to original spot (0%)
+            $("#playerPirate").animate({ left: '0%' }, 1200, function () { 
+                //after player walks back, it turns back around
+                $("#playerPirate").css({ transform: "scaleX(1)" });
+                //plays idle animation after player walks back and turns around
+                animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
+            });
+            //allows the player to attack again
+            debounce = false;
+        })
+        //setTimeout function to play enemy hurt animation after 800 milliseconds\
+        setTimeout(function () {
+            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "HURT", 150, false, function(){
+                //plays idle animation after hurt animation
+                animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
+            })
+            //function to change brightness 300 milliseconds after hurt function plays
+            setTimeout(function() {
+                $("#enemyPirate").css({ filter: "brightness(80%)" });
+                //function to change brightness back 1 second after brightness was originally changed
+                setTimeout (function() {
+                    $("#enemyPirate").css({ filter: "brightness(100%)" });
+                }, 1000)
+            }, 300)
+        }, 800)
     });
-
 });
 
 
