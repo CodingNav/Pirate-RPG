@@ -83,14 +83,16 @@ $(".pirate").click(function () {
 
         /* After the characters are chosen and main screen is hidden, 
            the following has the characters walk onto the screen (start of game) */
-
+        debounce = true;
         //player image moves 30% to left, making it off the screen
         $("#playerPirate").css({ left: "-30%" });
         //This spawns the player's character
         animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 150)
+
         //Animate function that moves the player's character left onto the screen and then plays idle animation
         $("#playerPirate").animate({ left: '0%' }, 3000, function () {
             animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
+            debounce = false;
         });
 
 
@@ -153,31 +155,35 @@ $("#playerPirate").click(function () {
     1200 is how long it takes to get to the 40% 
     everything inside callback function runs after the moving left animation is finished
     in this function it attacks after it moves*/
-    $("#playerPirate").animate({ left: '40%' }, 1200, function () {
+    animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 60)
+    $("#playerPirate").animate({ left: '40%' }, 1600, function () {
         animations("#playerPirate", playerSelected.folder, playerSelected.entity, "ATTACK", 150, false, function () {
             //turns player around after attack
-            $("#playerPirate").css({ transform: "scaleX(-1)" });
-            //has player walk back to original spot (0%)
-            $("#playerPirate").animate({ left: '0%' }, 1200, function () { 
-                //after player walks back, it turns back around
-                $("#playerPirate").css({ transform: "scaleX(1)" });
-                //plays idle animation after player walks back and turns around
-                animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
-            });
-            //allows the player to attack again
-            debounce = false;
+            animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 60)
+            setTimeout(function () {
+                $("#playerPirate").css({ transform: "scaleX(-1)" });
+                //has player walk back to original spot (0%)
+                $("#playerPirate").animate({ left: '0%' }, 1600, function () {
+                    //after player walks back, it turns back around
+                    $("#playerPirate").css({ transform: "scaleX(1)" });
+                    //plays idle animation after player walks back and turns around
+                    animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
+                    //runs enemyAttack function
+                    enemyAttack();
+                });
+            }, 500)
         })
         //setTimeout function to play enemy hurt animation after 800 milliseconds\
         setTimeout(function () {
-            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "HURT", 150, false, function(){
-                //plays idle animation after hurt animation
+            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "HURT", 150, false, function () {
+                //plays enemy idle animation after hurt animation
                 animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
             })
             //function to change brightness 300 milliseconds after hurt function plays
-            setTimeout(function() {
+            setTimeout(function () {
                 $("#enemyPirate").css({ filter: "brightness(80%)" });
                 //function to change brightness back 1 second after brightness was originally changed
-                setTimeout (function() {
+                setTimeout(function () {
                     $("#enemyPirate").css({ filter: "brightness(100%)" });
                 }, 1000)
             }, 300)
@@ -185,6 +191,42 @@ $("#playerPirate").click(function () {
     });
 });
 
+function enemyAttack() {
+    animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 60)
+    $("#enemyPirate").animate({ right: '40%' }, 1600, function () {
+        animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "ATTACK", 150, false, function () {
+            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 60)
+            setTimeout(function () {
+                //turns enemy around after attack
+                $("#enemyPirate").css({ transform: "scaleX(1)" });
+                //has enemy walk back to original spot (0%)
+                $("#enemyPirate").animate({ right: '0%' }, 1600, function () {
+                    //after enemy walks back, it turns back around
+                    $("#enemyPirate").css({ transform: "scaleX(-1)" });
+                    //plays idle animation after enemy walks back and turns around
+                    animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
+                });
+                //allows the player to attack again
+                debounce = false;
+            }, 500)
+        })
+        //setTimeout function to play player hurt animation after 800 milliseconds\
+        setTimeout(function () {
+            animations("#playerPirate", playerSelected.folder, playerSelected.entity, "HURT", 150, false, function () {
+                //plays player idle animation after hurt animation
+                animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
+            })
+            //function to change brightness 300 milliseconds after hurt function plays
+            setTimeout(function () {
+                $("#playerPirate").css({ filter: "brightness(80%)" });
+                //function to change brightness back 1 second after brightness was originally changed
+                setTimeout(function () {
+                    $("#playerPirate").css({ filter: "brightness(100%)" });
+                }, 1000)
+            }, 300)
+        }, 800)
+    });
+}
 
 /*
 TODO:
@@ -194,4 +236,5 @@ TODO:
 -Set each opponents attack points
 -Set up attack for player/enemy (walk toward each other and attack)
 -Set up die
+-README file
 */
