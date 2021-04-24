@@ -21,8 +21,22 @@
     <div id="gameScreen">
         <img id="playerPirate" src="" width=50%>
         <img id="enemyPirate" src="" width=50%>
+        <div class="playerStats">
+            <p>Name: <span id="playerName"></span></p>
+            <p>Power: <span id="playerPower"></span></p>
+            <div id="playerHealthbar">
+                <p><span id="playerHP"></span> HP</p>
+                <div id="playerGreenBar"></div>
+            </div>
+        </div>
+        <div class="enemyStats">
+            <p>Name: <span id="enemyName"></span></p>
+            <div id="enemyHealthbar">
+                <p><span id="enemyHP"></span> HP</p>
+                <div id="enemyGreenBar"></div>
+            </div>
+        </div>
     </div>
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./assets/javascript/game.js"></script>

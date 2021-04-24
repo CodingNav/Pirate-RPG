@@ -4,14 +4,55 @@ body {
     overflow: hidden;
 }
 
+#gameScreen {
+    display: none;
+}
+
 #playerPirate {
     position: absolute;
     left: 0;
 }
 
-
 #enemyPirate {
     transform: scaleX(-1);
     position: absolute;
     right: 0;
+}
+
+#playerHealthbar {
+    background-color: red;
+    width: 200px;
+    position: relative;
+}
+
+#playerGreenBar {
+    background-color: green;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    position: absolute;
+}
+
+#playerHealthbar p {
+    z-index: 2;
+    position: relative;
+}
+
+#enemyHealthbar {
+    background-color: red;
+    width: 200px;
+    position: relative;
+}
+
+#enemyGreenBar {
+    background-color: green;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    position: absolute;
+}
+
+#enemyHealthbar p {
+    z-index: 2;
+    position: relative;
 }

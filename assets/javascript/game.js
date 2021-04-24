@@ -98,8 +98,12 @@ $(".pirate").click(function () {
         else {
             secondEnemy = characters["Pirate Three"];
         }
-        console.log(characters);
-        console.log(secondEnemy);
+       
+        $("#playerName").text(playerSelected.stats.name);
+        $("#playerPower").text(playerSelected.stats.attack);
+        $("#enemyName").text(enemySelected.stats.name);
+
+        $("#gameScreen").show();
 
         /* After the characters are chosen and main screen is hidden, 
            the following has the characters walk onto the screen (start of game) */
@@ -288,6 +292,7 @@ function enemyAttack() {
 /*
 TODO:
 -Set up stats bar
+-set up swap enemy
 -after death, it shows end screen with message "player wins" or "enemy wins" and start over button
 -Add css
 -README file
