@@ -17,10 +17,10 @@ var characters = {
             name: "Pirate One",
             health: 120,
             attack: 200,//8
-            enemyAttackBack: 15,
-            alreadyPicked: false,
+            enemyAttackBack: 115, //15            
             multiplier: 1
         },
+        alreadyPicked: false,
         folder: 1,
         entity: "_entity_000_",
     },
@@ -30,9 +30,9 @@ var characters = {
             health: 100,
             attack: 14,
             enemyAttackBack: 5,
-            alreadyPicked: false,
             multiplier: 1
         },
+        alreadyPicked: false,
         folder: 2,
         entity: "_entity_000_",
     },
@@ -41,10 +41,10 @@ var characters = {
             name: "Pirate Three",
             health: 150,
             attack: 8,
-            enemyAttackBack: 20,
-            alreadyPicked: false,
+            enemyAttackBack: 20,            
             multiplier: 1
         },
+        alreadyPicked: false,
         folder: 3,
         entity: "_3-PIRATE_",
     }
@@ -98,6 +98,8 @@ $(".pirate").click(function () {
         else {
             secondEnemy = characters["Pirate Three"];
         }
+        console.log(characters);
+        console.log(secondEnemy);
 
         /* After the characters are chosen and main screen is hidden, 
            the following has the characters walk onto the screen (start of game) */
@@ -172,7 +174,7 @@ $("#playerPirate").click(function () {
     1200 is how long it takes to get to the 40% 
     everything inside callback function runs after the moving left animation is finished
     in this function it attacks after it moves*/
-    animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 60)
+    animations("#playerPirate", playerSelected.folder, playerSelected.entity, "RUN", 60)
     $("#playerPirate").animate({ left: '40%' }, 1600, function () {
         animations("#playerPirate", playerSelected.folder, playerSelected.entity, "ATTACK", 150, false, function () {
             //subtracts enemies health
@@ -184,21 +186,24 @@ $("#playerPirate").click(function () {
                 animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "DIE", 60, false)
             }
             //turns player around after attack
-            animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 60)
+            animations("#playerPirate", playerSelected.folder, playerSelected.entity, "RUN", 60)
             setTimeout(function () {
                 $("#playerPirate").css({ transform: "scaleX(-1)" });
-                //has player walk back to original spot (0%)
+                //has player run back to original spot (0%)
                 $("#playerPirate").animate({ left: '0%' }, 1600, function () {
-                    //after player walks back, it turns back around
+                    //after player runs back, it turns back around
                     $("#playerPirate").css({ transform: "scaleX(1)" });
-                    //plays idle animation after player walks back and turns around
+                    //plays idle animation after player runs back and turns around
                     animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
                     if (enemySelected.stats.health <= 0) {
                         $("#enemyPirate").fadeOut("slow");
-
+                        if (enemySelected == secondEnemy) {
+                            return;
+                        }
                         //second enemy walks in
                         enemySelected = secondEnemy;
 
+                        $("#enemyPirate").css({ filter: "brightness(100%)" });
                         $("#enemyPirate").fadeIn();
                         //player image moves 30% to right, making it off the screen
                         $("#enemyPirate").css({ right: "-30%" })
@@ -207,6 +212,7 @@ $("#playerPirate").click(function () {
                         //Animate function that moves the enemies character left onto the screen and then plays idle animation
                         $("#enemyPirate").animate({ right: '0%' }, 3000, function () {
                             animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
+                            debounce = false;
                         });
                         return;
                     }
@@ -236,7 +242,7 @@ $("#playerPirate").click(function () {
 });
 
 function enemyAttack() {
-    animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 60)
+    animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "RUN", 60)
     $("#enemyPirate").animate({ right: '40%' }, 1600, function () {
         animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "ATTACK", 150, false, function () {
             //subtracts players health
@@ -246,15 +252,15 @@ function enemyAttack() {
                 animations("#playerPirate", playerSelected.folder, playerSelected.entity, "DIE", 60, false)
                 return;
             }
-            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 60)
+            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "RUN", 60)
             setTimeout(function () {
                 //turns enemy around after attack
                 $("#enemyPirate").css({ transform: "scaleX(1)" });
-                //has enemy walk back to original spot (0%)
+                //has enemy run back to original spot (0%)
                 $("#enemyPirate").animate({ right: '0%' }, 1600, function () {
-                    //after enemy walks back, it turns back around
+                    //after enemy runs back, it turns back around
                     $("#enemyPirate").css({ transform: "scaleX(-1)" });
-                    //plays idle animation after enemy walks back and turns around
+                    //plays idle animation after enemy runs back and turns around
                     animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
                 });
                 //allows the player to attack again
@@ -281,8 +287,6 @@ function enemyAttack() {
 
 /*
 TODO:
--set up second enemies
--add run animation when they attack (not walk)
 -Set up stats bar
 -after death, it shows end screen with message "player wins" or "enemy wins" and start over button
 -Add css
