@@ -1,4 +1,4 @@
-//This object stores the set interval loops for the animations
+// This object stores the set interval loops for the animations
 var animationInterval = {};
 
 // Starts off as false to tell the game that the player has not been chosen yet.
@@ -7,27 +7,46 @@ var playerSelected = false;
 //  Starts off as false to tell the game that the enemy has not been chosen yet.
 var enemySelected = false;
 
+var secondEnemy;
 
 //key(property) and value pairs
 //Character object is where the character stats are stored
 var characters = {
     "Pirate One": {
-        name: "Pirate One",
-        health: 120,
-        attack: 8,
-        enemyAttackBack: 15
+        stats: {
+            name: "Pirate One",
+            health: 120,
+            attack: 200,//8
+            enemyAttackBack: 15,
+            alreadyPicked: false,
+            multiplier: 1
+        },
+        folder: 1,
+        entity: "_entity_000_",
     },
     "Pirate Two": {
-        name: "Pirate Two",
-        health: 100,
-        attack: 14,
-        enemyAttackBack: 5
+        stats: {
+            name: "Pirate Two",
+            health: 100,
+            attack: 14,
+            enemyAttackBack: 5,
+            alreadyPicked: false,
+            multiplier: 1
+        },
+        folder: 2,
+        entity: "_entity_000_",
     },
     "Pirate Three": {
-        name: "Pirate Three",
-        health: 150,
-        attack: 8,
-        enemyAttackBack: 20
+        stats: {
+            name: "Pirate Three",
+            health: 150,
+            attack: 8,
+            enemyAttackBack: 20,
+            alreadyPicked: false,
+            multiplier: 1
+        },
+        folder: 3,
+        entity: "_3-PIRATE_",
     }
 };
 
@@ -35,71 +54,49 @@ var characters = {
 $(".pirate").click(function () {
     if (playerSelected == false) {
         if (this.id == "pirateOne") {
-            playerSelected = {
-                stats : {
-                    ...characters["Pirate One"],
-                    multiplier : 1
-                },
-                folder: 1,
-                entity: "_entity_000_",
-            };
+            playerSelected = { ...characters["Pirate One"] };
+            characters["Pirate One"].alreadyPicked = true;
             $(this).hide();
         }
         else if (this.id == "pirateTwo") {
-            playerSelected = {
-                stats : {
-                    ...characters["Pirate Two"],
-                    multiplier : 1
-                },
-                folder: 2,
-                entity: "_entity_000_",
-            };
+            playerSelected = { ...characters["Pirate Two"] };
+            characters["Pirate Two"].alreadyPicked = true;
             $(this).hide();
         }
         else {
-            playerSelected = {
-                stats : {
-                    ...characters["Pirate Three"],
-                    multiplier : 1
-                },
-                folder: 3,
-                entity: "_3-PIRATE_",
-            };
+            playerSelected = { ...characters["Pirate Three"] };
+            characters["Pirate Three"].alreadyPicked = true;
             $(this).hide();
         }
     }
     //Inside click event. This is where the enemy is chosen
     else {
         if (this.id == "pirateOne") {
-            enemySelected = {
-                stats : {
-                    ...characters["Pirate One"]
-                },
-                folder: 1,
-                entity: "_entity_000_",
-            };
+            enemySelected = { ...characters["Pirate One"] };
+            characters["Pirate One"].alreadyPicked = true;
             //Hides the character selection screen 
             $("#mainScreen").hide();
         }
         else if (this.id == "pirateTwo") {
-            enemySelected = {
-                stats : {
-                    ...characters["Pirate Two"]
-                },
-                folder: 2,
-                entity: "_entity_000_",
-            };
+            enemySelected = { ...characters["Pirate Two"] };
+            characters["Pirate Two"].alreadyPicked = true;
             $("#mainScreen").hide();
         }
         else {
-            enemySelected = {
-                stats : {
-                    ...characters["Pirate Three"]
-                },
-                folder: 3,
-                entity: "_3-PIRATE_",
-            };
+            enemySelected = { ...characters["Pirate Three"] };
+            characters["Pirate Three"].alreadyPicked = true;
             $("#mainScreen").hide();
+        }
+
+        //searches array for character that has alreadyPicked as false
+        if (characters["Pirate One"].alreadyPicked == false) {
+            secondEnemy = characters["Pirate One"];
+        }
+        else if (characters["Pirate Two"].alreadyPicked == false) {
+            secondEnemy = characters["Pirate Two"];
+        }
+        else {
+            secondEnemy = characters["Pirate Three"];
         }
 
         /* After the characters are chosen and main screen is hidden, 
@@ -181,6 +178,11 @@ $("#playerPirate").click(function () {
             //subtracts enemies health
             enemySelected.stats.health -= (playerSelected.stats.attack * playerSelected.stats.multiplier);
             playerSelected.stats.multiplier++;
+            //enemy dying animation 
+
+            if (enemySelected.stats.health <= 0) {
+                animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "DIE", 60, false)
+            }
             //turns player around after attack
             animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 60)
             setTimeout(function () {
@@ -191,6 +193,23 @@ $("#playerPirate").click(function () {
                     $("#playerPirate").css({ transform: "scaleX(1)" });
                     //plays idle animation after player walks back and turns around
                     animations("#playerPirate", playerSelected.folder, playerSelected.entity, "IDLE", 150)
+                    if (enemySelected.stats.health <= 0) {
+                        $("#enemyPirate").fadeOut("slow");
+
+                        //second enemy walks in
+                        enemySelected = secondEnemy;
+
+                        $("#enemyPirate").fadeIn();
+                        //player image moves 30% to right, making it off the screen
+                        $("#enemyPirate").css({ right: "-30%" })
+                        //This spawns the enemy character
+                        animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 150)
+                        //Animate function that moves the enemies character left onto the screen and then plays idle animation
+                        $("#enemyPirate").animate({ right: '0%' }, 3000, function () {
+                            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
+                        });
+                        return;
+                    }
                     //runs enemyAttack function
                     enemyAttack();
                 });
@@ -205,10 +224,12 @@ $("#playerPirate").click(function () {
             //function to change brightness 300 milliseconds after hurt function plays
             setTimeout(function () {
                 $("#enemyPirate").css({ filter: "brightness(80%)" });
-                //function to change brightness back 1 second after brightness was originally changed
-                setTimeout(function () {
-                    $("#enemyPirate").css({ filter: "brightness(100%)" });
-                }, 1000)
+                if (enemySelected.stats.health > 0) {
+                    //function to change brightness back 1 second after brightness was originally changed
+                    setTimeout(function () {
+                        $("#enemyPirate").css({ filter: "brightness(100%)" });
+                    }, 1000)
+                }
             }, 300)
         }, 800)
     });
@@ -220,6 +241,11 @@ function enemyAttack() {
         animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "ATTACK", 150, false, function () {
             //subtracts players health
             playerSelected.stats.health -= enemySelected.stats.enemyAttackBack;
+            //player dying animation
+            if (playerSelected.stats.health <= 0) {
+                animations("#playerPirate", playerSelected.folder, playerSelected.entity, "DIE", 60, false)
+                return;
+            }
             animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 60)
             setTimeout(function () {
                 //turns enemy around after attack
@@ -255,8 +281,10 @@ function enemyAttack() {
 
 /*
 TODO:
--Set each player/opponents health points (HP)
--Set each player/opponents attack points
--Set up die
+-set up second enemies
+-add run animation when they attack (not walk)
+-Set up stats bar
+-after death, it shows end screen with message "player wins" or "enemy wins" and start over button
+-Add css
 -README file
 */
