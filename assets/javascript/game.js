@@ -36,6 +36,10 @@ $(".pirate").click(function () {
     if (playerSelected == false) {
         if (this.id == "pirateOne") {
             playerSelected = {
+                stats : {
+                    ...characters["Pirate One"],
+                    multiplier : 1
+                },
                 folder: 1,
                 entity: "_entity_000_",
             };
@@ -43,6 +47,10 @@ $(".pirate").click(function () {
         }
         else if (this.id == "pirateTwo") {
             playerSelected = {
+                stats : {
+                    ...characters["Pirate Two"],
+                    multiplier : 1
+                },
                 folder: 2,
                 entity: "_entity_000_",
             };
@@ -50,6 +58,10 @@ $(".pirate").click(function () {
         }
         else {
             playerSelected = {
+                stats : {
+                    ...characters["Pirate Three"],
+                    multiplier : 1
+                },
                 folder: 3,
                 entity: "_3-PIRATE_",
             };
@@ -60,6 +72,9 @@ $(".pirate").click(function () {
     else {
         if (this.id == "pirateOne") {
             enemySelected = {
+                stats : {
+                    ...characters["Pirate One"]
+                },
                 folder: 1,
                 entity: "_entity_000_",
             };
@@ -68,6 +83,9 @@ $(".pirate").click(function () {
         }
         else if (this.id == "pirateTwo") {
             enemySelected = {
+                stats : {
+                    ...characters["Pirate Two"]
+                },
                 folder: 2,
                 entity: "_entity_000_",
             };
@@ -75,6 +93,9 @@ $(".pirate").click(function () {
         }
         else {
             enemySelected = {
+                stats : {
+                    ...characters["Pirate Three"]
+                },
                 folder: 3,
                 entity: "_3-PIRATE_",
             };
@@ -143,7 +164,6 @@ function animations(characterId, folderName, animationEntity, animationName, ani
 var debounce = false;
 //click event for the player attack
 $("#playerPirate").click(function () {
-    console.log("Debounce: " + debounce)
     //if statement checks if debounce is true and if it's true, it stops the click function
     //if the debounce is true, that means an attack animation is already running when the player tried clicking again
     if (debounce == true) {
@@ -158,6 +178,9 @@ $("#playerPirate").click(function () {
     animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 60)
     $("#playerPirate").animate({ left: '40%' }, 1600, function () {
         animations("#playerPirate", playerSelected.folder, playerSelected.entity, "ATTACK", 150, false, function () {
+            //subtracts enemies health
+            enemySelected.stats.health -= (playerSelected.stats.attack * playerSelected.stats.multiplier);
+            playerSelected.stats.multiplier++;
             //turns player around after attack
             animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 60)
             setTimeout(function () {
@@ -195,6 +218,8 @@ function enemyAttack() {
     animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 60)
     $("#enemyPirate").animate({ right: '40%' }, 1600, function () {
         animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "ATTACK", 150, false, function () {
+            //subtracts players health
+            playerSelected.stats.health -= enemySelected.stats.enemyAttackBack;
             animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 60)
             setTimeout(function () {
                 //turns enemy around after attack
@@ -230,11 +255,8 @@ function enemyAttack() {
 
 /*
 TODO:
--when player attacks, enemy has hurt animation
--click to attack (both player and enemy walk toward one another)
--Set each opponents health points (HP)
--Set each opponents attack points
--Set up attack for player/enemy (walk toward each other and attack)
+-Set each player/opponents health points (HP)
+-Set each player/opponents attack points
 -Set up die
 -README file
 */
