@@ -16,6 +16,7 @@ var characters = {
         stats: {
             name: "Pirate One",
             health: 120,
+            maxHealth: 120,
             attack: 200,//8
             enemyAttackBack: 115, //15            
             multiplier: 1
@@ -28,6 +29,7 @@ var characters = {
         stats: {
             name: "Pirate Two",
             health: 100,
+            maxHealth: 100,
             attack: 14,
             enemyAttackBack: 5,
             multiplier: 1
@@ -40,8 +42,9 @@ var characters = {
         stats: {
             name: "Pirate Three",
             health: 150,
+            maxHealth: 150,
             attack: 8,
-            enemyAttackBack: 20,            
+            enemyAttackBack: 20,
             multiplier: 1
         },
         alreadyPicked: false,
@@ -98,10 +101,12 @@ $(".pirate").click(function () {
         else {
             secondEnemy = characters["Pirate Three"];
         }
-       
+
         $("#playerName").text(playerSelected.stats.name);
         $("#playerPower").text(playerSelected.stats.attack);
+        $("#playerHP").text(playerSelected.stats.health);
         $("#enemyName").text(enemySelected.stats.name);
+        $("#enemyHP").text(enemySelected.stats.health);
 
         $("#gameScreen").show();
 
@@ -184,8 +189,13 @@ $("#playerPirate").click(function () {
             //subtracts enemies health
             enemySelected.stats.health -= (playerSelected.stats.attack * playerSelected.stats.multiplier);
             playerSelected.stats.multiplier++;
-            //enemy dying animation 
+            $("#playerPower").text(playerSelected.stats.attack * playerSelected.stats.multiplier);
+            $("#enemyHP").text(enemySelected.stats.health);
 
+            var percentage = (enemySelected.stats.health / enemySelected.stats.maxHealth) * 100;
+            //target enemies green bar
+            $("#enemyGreenBar").animate({ width: percentage + "%" });
+            //enemy dying animation 
             if (enemySelected.stats.health <= 0) {
                 animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "DIE", 60, false)
             }
@@ -207,6 +217,9 @@ $("#playerPirate").click(function () {
                         //second enemy walks in
                         enemySelected = secondEnemy;
 
+                        $("#enemyName").text(enemySelected.stats.name);
+                        $("#enemyHP").text(enemySelected.stats.health);
+                        $("#enemyGreenBar").animate({ width: "100%" });
                         $("#enemyPirate").css({ filter: "brightness(100%)" });
                         $("#enemyPirate").fadeIn();
                         //player image moves 30% to right, making it off the screen
@@ -251,6 +264,12 @@ function enemyAttack() {
         animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "ATTACK", 150, false, function () {
             //subtracts players health
             playerSelected.stats.health -= enemySelected.stats.enemyAttackBack;
+            var percentage = (playerSelected.stats.health / playerSelected.stats.maxHealth) * 100;
+            $("#playerHP").text(playerSelected.stats.health);
+
+            //target players green bar
+            $("#playerGreenBar").animate({ width: percentage + "%" });
+
             //player dying animation
             if (playerSelected.stats.health <= 0) {
                 animations("#playerPirate", playerSelected.folder, playerSelected.entity, "DIE", 60, false)
@@ -291,7 +310,6 @@ function enemyAttack() {
 
 /*
 TODO:
--Set up stats bar
 -set up swap enemy
 -after death, it shows end screen with message "player wins" or "enemy wins" and start over button
 -Add css
