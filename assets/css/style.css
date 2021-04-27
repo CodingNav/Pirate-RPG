@@ -8,6 +8,14 @@ body {
     display: none;
 }
 
+#mainScreen {
+    text-align: center;
+}
+
+#pick-text {
+    font-size: 50px;
+}
+
 #playerPirate {
     position: absolute;
     left: 0;

@@ -71,6 +71,7 @@ $(".pirate").click(function () {
             characters["Pirate Three"].alreadyPicked = true;
             $(this).hide();
         }
+        $("#pick-text").text("Pick An Enemy")
     }
     //Inside click event. This is where the enemy is chosen
     else {
