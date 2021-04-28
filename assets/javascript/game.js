@@ -71,7 +71,7 @@ $(".pirate").click(function () {
             characters["Pirate Three"].alreadyPicked = true;
             $(this).hide();
         }
-        $("#pick-text").text("Pick An Enemy")
+        $("#pick-text").text("Pick An Enemy");
     }
     //Inside click event. This is where the enemy is chosen
     else {
@@ -118,7 +118,7 @@ $(".pirate").click(function () {
            the following has the characters walk onto the screen (start of game) */
         debounce = true;
         //player image moves 30% to left, making it off the screen
-        $("#playerPirate").css({ left: "-30%" });
+        $("#playerPirate").css({ left: "-50%" });
         //This spawns the player's character
         animations("#playerPirate", playerSelected.folder, playerSelected.entity, "WALK", 150)
 
@@ -130,7 +130,7 @@ $(".pirate").click(function () {
 
 
         //player image moves 30% to right, making it off the screen
-        $("#enemyPirate").css({ right: "-30%" })
+        $("#enemyPirate").css({ right: "-50%" })
         //This spawns the enemy character
         animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 150)
         //Animate function that moves the enemies character left onto the screen and then plays idle animation
@@ -217,6 +217,10 @@ $("#playerPirate").click(function () {
                     if (enemySelected.stats.health <= 0) {
                         $("#enemyPirate").fadeOut("slow");
                         if (enemySelected == secondEnemy) {
+                            //hides game-screen after second enemy dies (game over)
+                            $("#gameScreen").hide();
+                            $("#endScreen").show();
+                            $("#end-message").text("You Win");
                             return;
                         }
                         //second enemy walks in
@@ -279,6 +283,10 @@ function enemyAttack() {
             //player dying animation
             if (playerSelected.stats.health <= 0) {
                 animations("#playerPirate", playerSelected.folder, playerSelected.entity, "DIE", 60, false)
+                //hides game-screen after player dies (game over)
+                $("#gameScreen").hide();
+                $("#endScreen").show();
+                $("#end-message").text("You Lose");
                 return;
             }
             animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "RUN", 60)
@@ -340,10 +348,40 @@ $("#swap-enemy").click(function () {
     });
 })
 
+//Start Over Button
+$("#start-over").click(function () {
+    $("#endScreen").hide();
+    $("#pick-text").text("Pick A Fighter");
+    $(".pirate").show();
+    $("#mainScreen").show();
+
+    playerSelected = false;
+    enemySelected = false;
+    secondEnemy = null;
+
+    $("#swap").show();
+    $("#playerPirate").show();
+    $("#enemyPirate").show();
+    $("#playerGreenBar").animate({ width: "100%" });
+    $("#enemyGreenBar").animate({ width: "100%" });
+
+    characters["Pirate One"].alreadyPicked = false;
+    characters["Pirate Two"].alreadyPicked = false;
+    characters["Pirate Three"].alreadyPicked = false;
+
+    characters["Pirate One"].stats.health = characters["Pirate One"].stats.maxHealth;
+    characters["Pirate Two"].stats.health = characters["Pirate Two"].stats.maxHealth;
+    characters["Pirate Three"].stats.health = characters["Pirate Three"].stats.maxHealth;
+
+    characters["Pirate One"].stats.multiplier = 1;
+    characters["Pirate Two"].stats.multiplier = 1;
+    characters["Pirate Three"].stats.multiplier = 1;
+
+})
+
+
 /*
 TODO:
--set up swap enemy
--after death, it shows end screen with message "player wins" or "enemy wins" and start over button
 -Add css
 -README file
 */

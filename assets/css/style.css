@@ -1,10 +1,15 @@
 body {
     background-image: url("../images/background.png");
     background-size: cover;
+    background-repeat: no-repeat;
     overflow: hidden;
 }
 
 #gameScreen {
+    display: none;
+}
+
+#endScreen {
     display: none;
 }
 
@@ -19,12 +24,14 @@ body {
 #playerPirate {
     position: absolute;
     left: 0;
+    bottom: 0%;
 }
 
 #enemyPirate {
     transform: scaleX(-1);
     position: absolute;
     right: 0;
+    bottom: 0%;
 }
 
 #playerHealthbar {
