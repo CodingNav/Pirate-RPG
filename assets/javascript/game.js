@@ -17,8 +17,8 @@ var characters = {
             name: "Pirate One",
             health: 120,
             maxHealth: 120,
-            attack: 200,//8
-            enemyAttackBack: 115, //15            
+            attack: 8,
+            enemyAttackBack: 15,
             multiplier: 1
         },
         alreadyPicked: false,
@@ -109,7 +109,7 @@ $(".pirate").click(function () {
         $("#enemyName").text(enemySelected.stats.name);
         $("#enemyHP").text(enemySelected.stats.health);
 
-        //$("#swap-enemy").attr("src", "./assets/images/" + secondEnemy.folder + "-PIRATE.png")
+        //Grabs pirate image from folder and adds to div with id "swap-enemy" 
         $("#swap-enemy").css("background-image", "url(./assets/images/" + secondEnemy.folder + "-PIRATE.png)")
 
         $("#gameScreen").show();
@@ -202,6 +202,7 @@ $("#playerPirate").click(function () {
             //enemy dying animation 
             if (enemySelected.stats.health <= 0) {
                 animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "DIE", 60, false)
+                $("#swap").hide();
             }
             //turns player around after attack
             animations("#playerPirate", playerSelected.folder, playerSelected.entity, "RUN", 60)
@@ -223,7 +224,8 @@ $("#playerPirate").click(function () {
 
                         $("#enemyName").text(enemySelected.stats.name);
                         $("#enemyHP").text(enemySelected.stats.health);
-                        $("#enemyGreenBar").animate({ width: "100%" });
+                        var percentage = (enemySelected.stats.health / enemySelected.stats.maxHealth) * 100;
+                        $("#enemyGreenBar").animate({ width: percentage + "%" });
                         $("#enemyPirate").css({ filter: "brightness(100%)" });
                         $("#enemyPirate").fadeIn();
                         //player image moves 30% to right, making it off the screen
@@ -312,8 +314,31 @@ function enemyAttack() {
     });
 }
 
+$("#swap-enemy").click(function () {
+    $("#enemyPirate").css({ transform: "scaleX(1)" });
+    animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 150)
+    //Animate function that moves the enemies character left onto the screen and then plays idle animation
+    $("#enemyPirate").animate({ right: '-50%' }, 3000, function () {
+        var currentEnemy = enemySelected;
+        enemySelected = secondEnemy;
+        secondEnemy = currentEnemy;
 
+        $("#swap-enemy").css("background-image", "url(./assets/images/" + secondEnemy.folder + "-PIRATE.png)")
+        $("#enemyName").text(enemySelected.stats.name);
+        $("#enemyHP").text(enemySelected.stats.health);
+        var percentage = (enemySelected.stats.health / enemySelected.stats.maxHealth) * 100;
+        $("#enemyGreenBar").animate({ width: percentage + "%" });
 
+        $("#enemyPirate").css({ transform: "scaleX(-1)" });
+        $("#enemyPirate").css({ right: "-50%" })
+        //This spawns the enemy character
+        animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 150)
+        //Animate function that moves the enemies character left onto the screen and then plays idle animation
+        $("#enemyPirate").animate({ right: '0%' }, 3000, function () {
+            animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
+        });
+    });
+})
 
 /*
 TODO:
