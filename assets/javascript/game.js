@@ -109,6 +109,9 @@ $(".pirate").click(function () {
         $("#enemyName").text(enemySelected.stats.name);
         $("#enemyHP").text(enemySelected.stats.health);
 
+        //$("#swap-enemy").attr("src", "./assets/images/" + secondEnemy.folder + "-PIRATE.png")
+        $("#swap-enemy").css("background-image", "url(./assets/images/" + secondEnemy.folder + "-PIRATE.png)")
+
         $("#gameScreen").show();
 
         /* After the characters are chosen and main screen is hidden, 
@@ -308,6 +311,9 @@ function enemyAttack() {
         }, 800)
     });
 }
+
+
+
 
 /*
 TODO:

@@ -64,3 +64,11 @@ body {
     z-index: 2;
     position: relative;
 }
+
+#swap-enemy {
+    width: 100px;
+    height: 100px;
+    background-position: 20% 2%;
+    background-size: 150%;
+    background-color: #fffcbc;
+}
