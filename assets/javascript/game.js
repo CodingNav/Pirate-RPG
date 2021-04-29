@@ -14,7 +14,7 @@ var secondEnemy;
 var characters = {
     "Pirate One": {
         stats: {
-            name: "Pirate One",
+            name: "Seadog",
             health: 120,
             maxHealth: 120,
             attack: 8,
@@ -27,7 +27,7 @@ var characters = {
     },
     "Pirate Two": {
         stats: {
-            name: "Pirate Two",
+            name: "Vex",
             health: 100,
             maxHealth: 100,
             attack: 14,
@@ -40,7 +40,7 @@ var characters = {
     },
     "Pirate Three": {
         stats: {
-            name: "Pirate Three",
+            name: "Hook",
             health: 150,
             maxHealth: 150,
             attack: 8,
