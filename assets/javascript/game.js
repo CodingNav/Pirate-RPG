@@ -71,7 +71,7 @@ $(".pirate").click(function () {
             characters["Pirate Three"].alreadyPicked = true;
             $(this).hide();
         }
-        $("#pick-text").text("Pick An Enemy");
+        $("#pick-text").html("Pick An <br> Enemy");
     }
     //Inside click event. This is where the enemy is chosen
     else {
@@ -351,7 +351,7 @@ $("#swap-enemy").click(function () {
 //Start Over Button
 $("#start-over").click(function () {
     $("#endScreen").hide();
-    $("#pick-text").text("Pick A Fighter");
+    $("#pick-text").html("Pick A <br> Fighter");
     $(".pirate").show();
     $("#mainScreen").show();
 
@@ -383,5 +383,7 @@ $("#start-over").click(function () {
 /*
 TODO:
 -Add css
+-make mobile responsive
+-add music
 -README file
 */

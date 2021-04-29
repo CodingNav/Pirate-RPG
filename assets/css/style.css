@@ -5,20 +5,41 @@ body {
     overflow: hidden;
 }
 
+#pick-background {
+    background-image: url("../images/Game-Wooden-Panel.png");
+    width: 60%;
+    height: 30vh;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    margin: auto;
+}
+
+#pick-background h1 {
+    font-family: 'Pirata One', cursive;
+    font-size: 50px;
+    font-size: 72px;
+    -webkit-text-stroke: 2px #541212;
+    background: -webkit-linear-gradient(#fdb2b5, #f00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-top: 5%;
+    padding-left: 14px;
+}
+
+#mainScreen {
+    text-align: center;
+    margin-top: 3%;
+}
+
 #gameScreen {
     display: none;
 }
 
 #endScreen {
     display: none;
-}
-
-#mainScreen {
-    text-align: center;
-}
-
-#pick-text {
-    font-size: 50px;
 }
 
 #playerPirate {
