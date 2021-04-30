@@ -9,6 +9,9 @@ var enemySelected = false;
 
 var secondEnemy;
 
+//When the player attacks, debounce prevents the player from interrupting (by clicking multiple times) the current attack animation
+var debounce = true;
+
 //key(property) and value pairs
 //Character object is where the character stats are stored
 var characters = {
@@ -172,10 +175,9 @@ function animations(characterId, folderName, animationEntity, animationName, ani
     }, animationSpeed)
 }
 
-//When the player attacks, debounce prevents the player from interrupting (by clicking multiple times) the current attack animation
-var debounce = false;
+
 //click event for the player attack
-$("#playerPirate").click(function () {
+$(document).click(function () {
     //if statement checks if debounce is true and if it's true, it stops the click function
     //if the debounce is true, that means an attack animation is already running when the player tried clicking again
     if (debounce == true) {
@@ -323,6 +325,10 @@ function enemyAttack() {
 }
 
 $(".swap-enemy").click(function () {
+    if (debounce == true) {
+        return;
+    }
+    debounce = true;
     $("#enemyPirate").css({ transform: "scaleX(1)" });
     animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 150)
     //Animate function that moves the enemies character left onto the screen and then plays idle animation
@@ -344,6 +350,7 @@ $(".swap-enemy").click(function () {
         //Animate function that moves the enemies character left onto the screen and then plays idle animation
         $("#enemyPirate").animate({ right: '0%' }, 3000, function () {
             animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "IDLE", 150)
+            debounce = false;
         });
     });
 })
@@ -382,7 +389,6 @@ $("#start-over").click(function () {
 
 /*
 TODO:
--can click anywhere to attack
 -add music
 -README file
 */
