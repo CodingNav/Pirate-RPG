@@ -382,7 +382,6 @@ $("#start-over").click(function () {
 
 /*
 TODO:
--Add css
 -make mobile responsive
 -add music
 -README file
