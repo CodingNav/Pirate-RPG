@@ -17,7 +17,7 @@ var characters = {
             name: "Seadog",
             health: 120,
             maxHealth: 120,
-            attack: 8,
+            attack: 200, //8
             enemyAttackBack: 15,
             multiplier: 1
         },
@@ -109,8 +109,8 @@ $(".pirate").click(function () {
         $("#enemyName").text(enemySelected.stats.name);
         $("#enemyHP").text(enemySelected.stats.health);
 
-        //Grabs pirate image from folder and adds to div with id "swap-enemy" 
-        $("#swap-enemy").css("background-image", "url(./assets/images/" + secondEnemy.folder + "-PIRATE.png)")
+        //Grabs pirate image from folder and adds to div with class "swap-enemy" 
+        $(".swap-enemy").css("background-image", "url(./assets/images/" + secondEnemy.folder + "-PIRATE.png)")
 
         $("#gameScreen").show();
 
@@ -202,7 +202,7 @@ $("#playerPirate").click(function () {
             //enemy dying animation 
             if (enemySelected.stats.health <= 0) {
                 animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "DIE", 60, false)
-                $("#swap").hide();
+                $("#swap, #mobileSwap").addClass("hidden");
             }
             //turns player around after attack
             animations("#playerPirate", playerSelected.folder, playerSelected.entity, "RUN", 60)
@@ -322,7 +322,7 @@ function enemyAttack() {
     });
 }
 
-$("#swap-enemy").click(function () {
+$(".swap-enemy").click(function () {
     $("#enemyPirate").css({ transform: "scaleX(1)" });
     animations("#enemyPirate", enemySelected.folder, enemySelected.entity, "WALK", 150)
     //Animate function that moves the enemies character left onto the screen and then plays idle animation
@@ -331,7 +331,7 @@ $("#swap-enemy").click(function () {
         enemySelected = secondEnemy;
         secondEnemy = currentEnemy;
 
-        $("#swap-enemy").css("background-image", "url(./assets/images/" + secondEnemy.folder + "-PIRATE.png)")
+        $(".swap-enemy").css("background-image", "url(./assets/images/" + secondEnemy.folder + "-PIRATE.png)")
         $("#enemyName").text(enemySelected.stats.name);
         $("#enemyHP").text(enemySelected.stats.health);
         var percentage = (enemySelected.stats.health / enemySelected.stats.maxHealth) * 100;
@@ -359,7 +359,7 @@ $("#start-over").click(function () {
     enemySelected = false;
     secondEnemy = null;
 
-    $("#swap").show();
+    $("#swap, #mobileSwap").removeClass("hidden");
     $("#playerPirate").show();
     $("#enemyPirate").show();
     $("#playerGreenBar").animate({ width: "100%" });
@@ -382,7 +382,7 @@ $("#start-over").click(function () {
 
 /*
 TODO:
--make mobile responsive
+-can click anywhere to attack
 -add music
 -README file
 */
