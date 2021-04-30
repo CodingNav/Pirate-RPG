@@ -31,7 +31,7 @@ var characters = {
             health: 100,
             maxHealth: 100,
             attack: 14,
-            enemyAttackBack: 5,
+            enemyAttackBack: 10,
             multiplier: 1
         },
         alreadyPicked: false,
