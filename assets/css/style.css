@@ -76,7 +76,7 @@ body {
     text-shadow: 3px 2px #000000;
     background-image: url(../images/Small-Wood-Panel.png);
     margin-top: 20px;
-    padding: 0px 140px 0px 30px;
+    padding: 0px 85px 0px 30px;
     height: 13vh;
     background-size: contain;
     background-repeat: no-repeat;
@@ -96,7 +96,7 @@ body {
 }
 
 #playerHealthbar {
-    background-color: red;
+    background-color: #f94141;
     width: 250px;
     margin-top: 27px;
     position: relative;
@@ -105,7 +105,7 @@ body {
 }
 
 #playerGreenBar {
-    background-color: green;
+    background-color: #409100;
     width: 100%;
     height: 100%;
     top: 0px;
@@ -125,7 +125,7 @@ body {
 }
 
 #enemyHealthbar {
-    background-color: red;
+    background-color: #f94141;
     width: 250px;
     margin-top: 27px;
     position: relative;
@@ -134,7 +134,7 @@ body {
 }
 
 #enemyGreenBar {
-    background-color: green;
+    background-color: #409100;
     width: 100%;
     height: 100%;
     top: 0px;
