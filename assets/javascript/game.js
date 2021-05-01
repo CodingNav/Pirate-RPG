@@ -12,6 +12,9 @@ var secondEnemy;
 //When the player attacks, debounce prevents the player from interrupting (by clicking multiple times) the current attack animation
 var debounce = true;
 
+var music = $("#music").get()[0];
+music.volume = .05;
+
 //key(property) and value pairs
 //Character object is where the character stats are stored
 var characters = {
@@ -178,6 +181,10 @@ function animations(characterId, folderName, animationEntity, animationName, ani
 
 //click event for the player attack
 $(document).click(function () {
+
+
+    music.play();
+
     //if statement checks if debounce is true and if it's true, it stops the click function
     //if the debounce is true, that means an attack animation is already running when the player tried clicking again
     if (debounce == true) {
@@ -386,9 +393,14 @@ $("#start-over").click(function () {
 
 })
 
+$(".slidecontainer input").change(function () {
+    music.volume = (this.value / 100) * .2;
+})
+
+$(".slidecontainer input").val((music.volume * 100) / .2);
+
 
 /*
 TODO:
--add music
 -README file
 */
