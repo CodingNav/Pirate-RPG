@@ -7,6 +7,14 @@ body {
     width: 100%;
 }
 
+* { 
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
 #pick-background {
     background-image: url("../images/Game-Wooden-Panel.png");
     width: 60%;
