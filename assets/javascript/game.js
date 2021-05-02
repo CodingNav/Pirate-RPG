@@ -23,7 +23,7 @@ var characters = {
             name: "Seadog",
             health: 120,
             maxHealth: 120,
-            attack: 200, //8
+            attack: 8,
             enemyAttackBack: 15,
             multiplier: 1
         },
