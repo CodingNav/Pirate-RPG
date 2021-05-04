@@ -399,8 +399,3 @@ $(".slidecontainer input").change(function () {
 
 $(".slidecontainer input").val((music.volume * 100) / .2);
 
-
-/*
-TODO:
--README file
-*/
